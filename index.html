@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#1d0a16" />
+<title>Chạm vào trái tim 💗</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@200;300;400;500&family=Dancing+Script:wght@500;700&display=swap&subset=vietnamese" rel="stylesheet">
+
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%92%97%3C/text%3E%3C/svg%3E">
+
+<style>
+/* ============================================================
+   MÀU & NỀN
+   ============================================================ */
+:root{
+  --bg-1:#1d0a16;
+  --bg-2:#2b0e21;
+  --bg-3:#3a1029;
+  --rose:#ff6f9c;
+  --rose-lite:#ffb3cb;
+  --rose-deep:#c93f6d;
+  --gold:#e8c37a;
+  --gold-lite:#fff0c9;
+  --gold-deep:#a97c2f;
+  --cream:#ffeef4;
+  --muted:#d7b9c6;
+  --sans:'Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --script:'Dancing Script','Be Vietnam Pro',cursive;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--bg-1);
+  color:var(--cream);
+  font-family:var(--sans);
+  font-weight:300;
+  overflow:hidden;
+  -webkit-font-smoothing:antialiased;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+  user-select:none;-webkit-user-select:none;
+}
+
+/* ---- ảnh nền: phóng chậm kiểu Ken Burns ---- */
+.photo{position:fixed;inset:0;z-index:0;overflow:hidden;background:var(--bg-1)}
+.photo::after{                       /* ánh vàng phủ lên ảnh cho ấm */
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(200deg,rgba(232,195,122,.16),transparent 45%,rgba(255,111,156,.14));
+  mix-blend-mode:soft-light;
+}
+.photo img{
+  position:absolute;inset:-7%;width:114%;height:114%;
+  object-fit:cover;object-position:center 38%;
+  filter:brightness(.86) saturate(1.16) contrast(1.06);
+  animation:kenburns 30s ease-in-out infinite alternate;
+  will-change:transform;
+}
+@keyframes kenburns{
+  0%{transform:scale(1.02) translate(0,0)}
+  100%{transform:scale(1.16) translate(-1.6%,-2%)}
+}
+
+/* ---- lớp phủ để chữ luôn đọc được ---- */
+.tint{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 6%, rgba(255,150,190,.18) 0%, transparent 52%),
+    radial-gradient(ellipse at 50% 108%, rgba(48,8,32,.7) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(18,5,14,.42) 0%, rgba(26,8,20,.16) 38%, rgba(14,3,11,.62) 100%);
+}
+
+/* ---- viền khung vàng mảnh quanh màn hình ---- */
+.frame{
+  position:fixed;inset:10px;z-index:4;pointer-events:none;border-radius:20px;
+  border:1px solid rgba(232,195,122,.22);
+  box-shadow:inset 0 0 60px rgba(232,195,122,.06);
+}
+.frame::before,.frame::after{
+  content:'';position:absolute;width:26px;height:26px;
+  border:1px solid rgba(255,240,201,.5);
+}
+.frame::before{top:-1px;left:-1px;border-right:0;border-bottom:0;border-radius:20px 0 0 0}
+.frame::after{bottom:-1px;right:-1px;border-left:0;border-top:0;border-radius:0 0 20px 0}
+.glow{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.glow.g1{width:70vw;height:70vw;top:-18vw;left:-14vw;background:rgba(255,111,156,.15);animation:breathe 9s ease-in-out infinite}
+.glow.g2{width:60vw;height:60vw;bottom:-20vw;right:-16vw;background:rgba(232,195,122,.11);animation:breathe 11s ease-in-out infinite reverse}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.15);opacity:1}}
+
+.vignette{
+  position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 48%,rgba(12,4,10,.5) 100%);
+}
+
+/* ============================================================
+   TIM BAY LƠ LỬNG Ở NỀN
+   ============================================================ */
+#floaters{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.floater{
+  position:absolute;bottom:-8vh;
+  color:var(--rose-lite);opacity:0;
+  animation:floatUp linear infinite;
+  will-change:transform,opacity;
+}
+@keyframes floatUp{
+  0%{transform:translate(0,0) rotate(0deg) scale(.8);opacity:0}
+  10%{opacity:.3}
+  90%{opacity:.18}
+  100%{transform:translate(var(--dx),-112vh) rotate(var(--rot)) scale(1.1);opacity:0}
+}
+
+/* ---- bụi vàng lấp lánh ---- */
+#sparkles{position:fixed;inset:0;z-index:1;pointer-events:none}
+.spark{
+  position:absolute;border-radius:50%;
+  background:radial-gradient(circle,#fff8e2 0%,rgba(232,195,122,.75) 40%,transparent 70%);
+  box-shadow:0 0 8px rgba(255,224,160,.8);
+  animation:twinkle ease-in-out infinite;
+  will-change:opacity,transform;
+}
+@keyframes twinkle{
+  0%,100%{opacity:0;transform:scale(.4)}
+  50%{opacity:.95;transform:scale(1.25)}
+}
+
+/* ============================================================
+   BỐ CỤC CHÍNH
+   ============================================================ */
+.stage{
+  position:relative;z-index:2;
+  height:100svh;height:100dvh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(14px,3.2vh,28px);
+  padding:max(22px,env(safe-area-inset-top)) 24px max(22px,env(safe-area-inset-bottom));
+  text-align:center;
+}
+
+.title{
+  font-family:var(--script);font-weight:700;
+  font-size:clamp(32px,8.4vw,48px);
+  line-height:1.15;
+  background:linear-gradient(100deg,
+    #ffd9e6 0%, var(--gold-lite) 22%, var(--gold) 38%,
+    #fff6de 50%, var(--gold) 62%, #ffc7db 82%, #ffe9f0 100%);
+  background-size:260% 100%;
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+  filter:drop-shadow(0 0 20px rgba(255,140,180,.35)) drop-shadow(0 2px 10px rgba(0,0,0,.5));
+  animation:fadeDown 1.2s .2s both, shimmer 7s linear infinite 1s;
+}
+@keyframes shimmer{0%{background-position:0% 50%}100%{background-position:260% 50%}}
+
+/* gạch trang trí hai bên phụ đề */
+.subtitle{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  font-size:clamp(10px,2.8vw,12px);font-weight:200;
+  letter-spacing:.34em;text-transform:uppercase;color:var(--muted);
+  margin-top:8px;
+  animation:fadeDown 1.2s .45s both;
+}
+.subtitle::before,.subtitle::after{
+  content:'';height:1px;width:clamp(22px,7vw,46px);
+  background:linear-gradient(90deg,transparent,rgba(232,195,122,.75),transparent);
+}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
+
+/* ============================================================
+   TRÁI TIM
+   ============================================================ */
+.heart-zone{
+  position:relative;
+  width:clamp(180px,52vw,250px);
+  aspect-ratio:1;
+  display:grid;place-items:center;
+  cursor:pointer;
+  animation:fadeIn 1.4s .6s both;
+}
+@keyframes fadeIn{from{opacity:0;transform:scale(.86)}to{opacity:1;transform:none}}
+
+/* quầng sáng vàng quay chậm sau lưng tim */
+.halo{
+  position:absolute;width:125%;aspect-ratio:1;border-radius:50%;pointer-events:none;
+  background:conic-gradient(from 0deg,
+    transparent 0deg, rgba(255,214,150,.42) 40deg, transparent 110deg,
+    rgba(255,140,180,.4) 175deg, transparent 250deg,
+    rgba(255,240,201,.35) 305deg, transparent 360deg);
+  filter:blur(20px);
+  animation:spinHalo 16s linear infinite;
+  will-change:transform;
+}
+@keyframes spinHalo{to{transform:rotate(360deg)}}
+
+/* tia sáng mảnh toả ra như ngôi sao */
+.rays{
+  position:absolute;width:150%;aspect-ratio:1;pointer-events:none;opacity:.5;
+  background:repeating-conic-gradient(
+    from 0deg,
+    rgba(255,240,201,.16) 0deg 1.2deg,
+    transparent 1.2deg 15deg);
+  -webkit-mask-image:radial-gradient(circle,transparent 32%,#000 46%,transparent 74%);
+  mask-image:radial-gradient(circle,transparent 32%,#000 46%,transparent 74%);
+  animation:spinHalo 46s linear infinite reverse;
+}
+
+/* vòng sáng toả ra liên tục quanh tim */
+.aura-ring{
+  position:absolute;width:78%;aspect-ratio:1;border-radius:50%;
+  border:1px solid rgba(255,190,140,.55);
+  box-shadow:0 0 18px rgba(255,200,150,.25);
+  animation:auraOut 3.2s ease-out infinite;
+  pointer-events:none;
+}
+.aura-ring:nth-child(2){animation-delay:1.6s}
+@keyframes auraOut{
+  0%{transform:scale(.7);opacity:.55}
+  100%{transform:scale(1.65);opacity:0}
+}
+
+/* vòng nổ ra khi chạm */
+.tap-ring{
+  position:absolute;width:70%;aspect-ratio:1;border-radius:50%;
+  border:2px solid rgba(255,179,203,.85);
+  pointer-events:none;opacity:0;
+}
+.tap-ring.go{animation:tapOut .75s cubic-bezier(.16,.8,.3,1) forwards}
+@keyframes tapOut{
+  0%{transform:scale(.6);opacity:.9}
+  100%{transform:scale(2.1);opacity:0}
+}
+
+.heart-svg{
+  width:100%;height:100%;position:relative;
+  filter:drop-shadow(0 0 30px rgba(255,79,132,.6))
+         drop-shadow(0 0 60px rgba(232,195,122,.28))
+         drop-shadow(0 10px 34px rgba(0,0,0,.5));
+  animation:beat 1.7s ease-in-out infinite;
+  transform-origin:50% 55%;
+  will-change:transform;
+}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  14%{transform:scale(1.075)}
+  28%{transform:scale(1)}
+  42%{transform:scale(1.045)}
+  58%{transform:scale(1)}
+}
+.heart-zone:active .heart-svg{animation:squish .45s ease-out}
+@keyframes squish{
+  0%{transform:scale(1)}
+  22%{transform:scale(.9)}
+  55%{transform:scale(1.14)}
+  100%{transform:scale(1)}
+}
+
+/* đốm sáng nhỏ chạy trên mặt tim */
+.shine{animation:shineMove 4.5s ease-in-out infinite}
+@keyframes shineMove{
+  0%,100%{opacity:.55;transform:translate(0,0)}
+  50%{opacity:.9;transform:translate(4px,-5px)}
+}
+
+/* ============================================================
+   GỢI Ý & THẺ LỜI NHẮN
+   ============================================================ */
+.hint{
+  font-size:clamp(13px,3.6vw,15px);font-weight:200;
+  color:var(--muted);letter-spacing:.05em;
+  animation:hintPulse 2.8s ease-in-out infinite;
+}
+@keyframes hintPulse{0%,100%{opacity:.45}50%{opacity:1}}
+.hint.gone{display:none}
+
+.card{
+  position:relative;
+  width:min(520px,92vw);
+  min-height:132px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;
+  padding:28px 24px 26px;
+  border-radius:22px;
+  background:
+    linear-gradient(160deg,rgba(255,246,222,.10),rgba(255,255,255,.03) 55%,rgba(255,111,156,.07));
+  box-shadow:0 22px 60px rgba(16,3,12,.55), inset 0 1px 0 rgba(255,255,255,.12);
+  backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);
+  opacity:0;transform:translateY(14px) scale(.97);
+  transition:opacity .5s ease, transform .5s cubic-bezier(.16,.8,.3,1);
+  pointer-events:none;
+}
+/* viền vàng chuyển sắc */
+.card::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(145deg,rgba(255,240,201,.75),rgba(232,195,122,.25) 35%,rgba(255,150,190,.5) 70%,rgba(255,240,201,.6));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;
+  pointer-events:none;
+}
+.card.show{opacity:1;transform:none}
+
+.chip{
+  font-size:10.5px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--gold-lite);
+  padding:5px 14px;border-radius:999px;
+  background:linear-gradient(120deg,rgba(232,195,122,.2),rgba(255,111,156,.16));
+  border:1px solid rgba(232,195,122,.42);
+  box-shadow:0 0 18px rgba(232,195,122,.14);
+}
+.msg{
+  font-size:clamp(16px,4.4vw,19px);font-weight:300;line-height:1.75;
+  color:#fff7fa;
+  text-shadow:0 1px 12px rgba(0,0,0,.35);
+  text-wrap:pretty;
+}
+.sign{
+  font-family:var(--script);font-size:20px;
+  color:var(--gold);opacity:.9;
+  text-shadow:0 0 14px rgba(232,195,122,.35);
+}
+
+.counter{
+  font-size:11px;font-weight:200;letter-spacing:.24em;text-transform:uppercase;
+  color:rgba(232,195,122,.7);
+  min-height:16px;
+}
+
+/* nút tắt/bật tiếng */
+.sound-btn{
+  position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;z-index:6;
+  width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;cursor:pointer;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(232,195,122,.35);
+  color:var(--gold-lite);font-size:15px;
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  transition:transform .2s ease, opacity .3s ease;
+  opacity:.65;
+}
+.sound-btn:active{transform:scale(.9)}
+
+/* lớp vẽ hiệu ứng nổ */
+#fx{position:fixed;inset:0;z-index:5;pointer-events:none}
+
+/* ============================================================
+   MÀN HÌNH KHOÁ
+   ============================================================ */
+#khoa{
+  position:fixed;inset:0;z-index:20;
+  display:flex;align-items:center;justify-content:center;
+  padding:24px;
+  background:rgba(10,3,9,.55);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  transition:opacity .8s ease, visibility .8s;
+}
+#khoa.mo{opacity:0;visibility:hidden;pointer-events:none}
+
+.hop-khoa{
+  position:relative;
+  width:min(400px,92vw);
+  padding:34px 26px 28px;border-radius:24px;text-align:center;
+  background:linear-gradient(160deg,rgba(255,246,222,.12),rgba(20,6,16,.55) 60%,rgba(255,111,156,.1));
+  box-shadow:0 26px 70px rgba(10,2,8,.6), inset 0 1px 0 rgba(255,255,255,.14);
+  backdrop-filter:blur(18px) saturate(1.2);-webkit-backdrop-filter:blur(18px) saturate(1.2);
+  animation:fadeIn .9s .2s both;
+}
+.hop-khoa::before{
+  content:'';position:absolute;inset:0;border-radius:inherit;padding:1px;
+  background:linear-gradient(145deg,rgba(255,240,201,.8),rgba(232,195,122,.25) 40%,rgba(255,150,190,.55) 75%,rgba(255,240,201,.7));
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;
+}
+.hop-khoa.rung{animation:rung .5s}
+@keyframes rung{
+  0%,100%{transform:translateX(0)}
+  15%{transform:translateX(-11px)}35%{transform:translateX(9px)}
+  55%{transform:translateX(-6px)}75%{transform:translateX(4px)}
+}
+
+.khoa-tim{font-size:30px;filter:drop-shadow(0 0 14px rgba(255,111,156,.6));animation:beat 1.9s ease-in-out infinite}
+.khoa-tieu{
+  font-family:var(--script);font-size:29px;margin-top:8px;
+  background:linear-gradient(100deg,#ffd9e6,var(--gold-lite) 40%,var(--gold) 60%,#ffe9f0);
+  -webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;
+}
+.khoa-phu{font-size:12.5px;font-weight:200;color:var(--muted);margin-top:6px;line-height:1.6}
+
+.o-nhap{
+  width:100%;margin-top:16px;padding:13px 16px;border-radius:14px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(232,195,122,.3);
+  color:#fff6f9;font-family:var(--sans);font-weight:300;font-size:15px;
+  outline:none;transition:border-color .25s ease, background .25s ease;
+}
+.o-nhap::placeholder{color:rgba(215,185,198,.5)}
+.o-nhap:focus{border-color:rgba(255,214,150,.75);background:rgba(255,255,255,.11)}
+
+.nut-mo{
+  width:100%;margin-top:18px;padding:14px;border-radius:14px;cursor:pointer;
+  border:1px solid rgba(255,240,201,.45);
+  background:linear-gradient(120deg,#ff6f9c,#c93f6d 55%,#a97c2f);
+  color:#fff8ec;font-family:var(--sans);font-weight:400;font-size:14.5px;letter-spacing:.12em;text-transform:uppercase;
+  box-shadow:0 10px 30px rgba(201,63,109,.35);
+  transition:transform .18s ease, box-shadow .25s ease;
+}
+.nut-mo:active{transform:scale(.97)}
+
+.loi-sai{
+  margin-top:14px;min-height:20px;
+  font-size:14px;font-weight:400;color:#ff8ba6;
+  text-shadow:0 0 12px rgba(255,79,132,.4);
+  opacity:0;transition:opacity .3s ease;
+}
+.loi-sai.hien{opacity:1}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important}
+}
+</style>
+</head>
+<body>
+
+<div class="photo"><img src="images/2.jpg" alt=""></div>
+<div class="tint"></div>
+<div class="glow g1"></div>
+<div class="glow g2"></div>
+<div id="sparkles"></div>
+<div id="floaters"></div>
+<div class="vignette"></div>
+<div class="frame"></div>
+
+<!-- ===== MÀN HÌNH KHOÁ ===== -->
+<div id="khoa">
+  <form class="hop-khoa" id="hopKhoa" autocomplete="off">
+    <div class="khoa-tim">💗</div>
+    <h2 class="khoa-tieu">Đúng người mới mở</h2>
+    <p class="khoa-phu">Nếu em là người anh đang nghĩ tới,<br>hai câu này dễ lắm.</p>
+
+    <input class="o-nhap" id="oTen" type="text" placeholder="Tên của em là gì?"
+           autocomplete="off" autocapitalize="words" spellcheck="false">
+    <input class="o-nhap" id="oNgay" type="text" inputmode="numeric"
+           placeholder="Ngày sinh của em? (vd 08/09/2004)" autocomplete="off">
+
+    <button class="nut-mo" type="submit">Mở ra</button>
+    <p class="loi-sai" id="loiSai"></p>
+  </form>
+</div>
+
+<div class="sound-btn" id="soundBtn" title="Bật/tắt tiếng">♪</div>
+
+<main class="stage">
+  <div>
+    <h1 class="title" id="title">Gửi em</h1>
+    <p class="subtitle">một điều nhỏ, mỗi lần chạm</p>
+  </div>
+
+  <div class="heart-zone" id="heartZone" role="button" tabindex="0" aria-label="Chạm vào trái tim">
+    <span class="rays"></span>
+    <span class="halo"></span>
+    <span class="aura-ring"></span>
+    <span class="aura-ring"></span>
+    <span class="tap-ring" id="tapRing"></span>
+
+    <svg class="heart-svg" viewBox="0 0 100 100" aria-hidden="true">
+      <defs>
+        <radialGradient id="hg" cx="34%" cy="26%" r="82%">
+          <stop offset="0%"  stop-color="#ffe1ea"/>
+          <stop offset="26%" stop-color="#ff8fb4"/>
+          <stop offset="60%" stop-color="#ee4a80"/>
+          <stop offset="85%" stop-color="#bd2a5c"/>
+          <stop offset="100%" stop-color="#7d1338"/>
+        </radialGradient>
+        <linearGradient id="vien" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%"  stop-color="#fff6de"/>
+          <stop offset="30%" stop-color="#e8c37a"/>
+          <stop offset="55%" stop-color="#a97c2f"/>
+          <stop offset="78%" stop-color="#ffeec4"/>
+          <stop offset="100%" stop-color="#d9a441"/>
+        </linearGradient>
+        <radialGradient id="sg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#fff" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#fff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <path d="M50 89.5C21.5 67 5.5 51.5 5.5 33.5 5.5 18.5 17.5 7.5 30.5 7.5c8.9 0 16.2 4.9 19.5 12.4C53.3 12.4 60.6 7.5 69.5 7.5c13 0 25 11 25 26 0 18-16 33.5-44.5 56z"
+            fill="url(#hg)" stroke="url(#vien)" stroke-width="1.8" stroke-linejoin="round"/>
+      <ellipse class="shine" cx="32" cy="29" rx="14" ry="9.5" fill="url(#sg)" transform="rotate(-28 32 29)"/>
+      <ellipse cx="63" cy="24" rx="5" ry="3.4" fill="#fff" opacity=".28" transform="rotate(-24 63 24)"/>
+    </svg>
+  </div>
+
+  <p class="hint" id="hint">chạm nhẹ vào tim nhé…</p>
+
+  <section class="card" id="card">
+    <span class="chip" id="chip"></span>
+    <p class="msg" id="msg"></p>
+    <span class="sign">— anh</span>
+  </section>
+
+  <p class="counter" id="counter"></p>
+</main>
+
+<canvas id="fx"></canvas>
+
+<script>
+/* ============================================================
+   CÓ THỂ SỬA NHANH Ở ĐÂY
+   ============================================================ */
+const TEN_EM   = 'em';      // đổi thành tên của nàng: 'Hương', 'bé Mèo'...
+const KY_TEN   = 'anh';     // chữ ký dưới mỗi lời nhắn
+
+/* ============================================================
+   NHỮNG ĐIỀU MUỐN NÓI
+   ============================================================ */
+const LOI_NHAN = [
+  /* ---------- ĐỘNG VIÊN TINH THẦN ---------- */
+  ['Tinh thần','Hôm nay em đã cố gắng nhiều rồi. Không sao cả nếu bây giờ em chỉ muốn ngồi yên một lát và chẳng làm gì.'],
+  ['Tinh thần','Em không cần phải mạnh mẽ mọi lúc. Trước mặt anh, em cứ yếu đuối một chút cũng được.'],
+  ['Tinh thần','Chuyện gì rồi cũng qua thôi. Nó chỉ cần thêm chút thời gian — mà thời gian đó em không đi một mình.'],
+  ['Tinh thần','Nếu hôm nay không ổn, mình để dành sức cho ngày mai. Ngày mai vẫn còn nguyên ở đó, đợi em.'],
+  ['Tinh thần','Em giỏi hơn em nghĩ nhiều lắm. Anh đứng ngoài nhìn nên anh thấy rõ hơn em.'],
+  ['Tinh thần','Buồn thì cứ khóc, đừng nén. Khóc xong rồi mình đi ăn gì đó ngon ngon.'],
+  ['Tinh thần','Không phải ngày nào cũng phải có ý nghĩa. Có những ngày chỉ cần trôi qua bình an là đủ giỏi rồi.'],
+  ['Tinh thần','Em đã đi xa hơn em tưởng đấy. Thỉnh thoảng quay lại nhìn đoạn đường sau lưng, đừng chỉ nhìn phần còn lại.'],
+  ['Tinh thần','Anh không cần em hoàn hảo. Anh chỉ cần em bình an.'],
+  ['Tinh thần','Thở một hơi thật sâu đi. Rồi thêm một hơi nữa. Đấy, em vẫn ổn mà.'],
+  ['Tinh thần','Nếu hôm nay em thấy mình chẳng làm được gì, nhớ là vẫn có một người thấy em quý giá vô cùng.'],
+
+  /* ---------- CÔNG VIỆC ---------- */
+  ['Công việc','Deadline rồi cũng xong, sếp rồi cũng nguôi — chỉ có sức khoẻ của em là không mua lại được. Nhớ nghỉ.'],
+  ['Công việc','Làm chưa xong không có nghĩa là em kém. Chỉ là việc nhiều hơn sức một người thôi.'],
+  ['Công việc','Em cứ làm phần của mình cho tử tế, phần còn lại để thời gian trả lời giúp.'],
+  ['Công việc','Một lời chê không định nghĩa được em. Em là cả một quá trình cố gắng rất dài.'],
+  ['Công việc','Nếu hôm nay ở công ty mệt quá, nhớ là hết giờ vẫn có người đợi em về.'],
+  ['Công việc','Đừng mang việc về nhà nữa. Nhà là để em được làm em, không phải làm nhân viên.'],
+  ['Công việc','Sai một chút cũng được. Người ta chỉ nhớ người dám làm, chẳng ai nhớ người không bao giờ sai.'],
+  ['Công việc','Ăn trưa đi đã rồi làm tiếp. Việc không chạy mất đâu, còn dạ dày thì có đấy.'],
+  ['Công việc','Anh tự hào vì em nghiêm túc với công việc. Anh chỉ mong em nghiêm túc với việc nghỉ ngơi nữa thôi.'],
+  ['Công việc','Hôm nay khó thật, nhưng em đã xử lý rất ổn. Thật đấy, không phải khen cho có đâu.'],
+  ['Công việc','Lương có thể chưa cao, vị trí có thể chưa như ý — nhưng em đang lớn lên mỗi ngày, anh nhìn thấy mà.'],
+
+  /* ---------- QUAN TÂM ---------- */
+  ['Quan tâm','Uống nước chưa? Đứng dậy đi lại một chút đi, ngồi lâu là đau lưng đấy.'],
+  ['Quan tâm','Tối nay ngủ sớm nhé. Điện thoại để xa ra, chuyện gì mai anh kể cho nghe.'],
+  ['Quan tâm','Trời trở lạnh rồi, mặc thêm áo. Anh không muốn nghe tiếng em ho đâu.'],
+  ['Quan tâm','Ăn cơm đúng bữa giúp anh. Dạ dày em không chịu nổi thêm trận bỏ bữa nào nữa đâu.'],
+  ['Quan tâm','Về tới nhà nhắn anh một tiếng, để anh yên tâm.'],
+  ['Quan tâm','Mệt thì cứ nói, đừng cười cho qua. Anh nhận ra hết đấy.'],
+  ['Quan tâm','Đừng cố ôm hết mọi thứ. Cái gì nặng quá thì đưa anh giữ giùm một nửa.'],
+  ['Quan tâm','Hôm nay của em thế nào? Kể anh nghe đi, dài bao nhiêu anh cũng đọc hết.'],
+  ['Quan tâm','Nhớ sạc pin điện thoại. Và sạc pin cho chính em nữa.'],
+  ['Quan tâm','Nếu em ốm là anh giận... rồi anh sẽ đi mua cháo. Nên tốt nhất là đừng ốm.'],
+
+  /* ---------- TÌNH CẢM ---------- */
+  ['Thương em','Anh thích cái cách em cố gắng. Nó làm anh muốn cố gắng theo.'],
+  ['Thương em','Có em, mấy chuyện linh tinh ngoài kia tự nhiên nhẹ đi một nửa.'],
+  ['Thương em','Anh không hứa gì to tát. Anh chỉ ở đây, mỗi ngày, đủ lâu để em tin.'],
+  ['Thương em','Ngày dài đến mấy, chỉ cần nghĩ tới em là anh thấy đáng.'],
+  ['Thương em','Em là phần dịu dàng nhất trong một ngày rất bận của anh.'],
+  ['Thương em','Anh thương em, kể cả những hôm em cáu kỉnh, mệt mỏi và chẳng muốn nói chuyện với ai.'],
+  ['Thương em','Nếu một ngày em quên mất mình đáng yêu thế nào, mở lại trang này nhé.'],
+  ['Thương em','Cảm ơn em vì đã ở lại, kể cả khi anh chưa phải phiên bản tốt nhất của mình.'],
+];
+
+const LOI_CUOI = ['Hết chữ rồi','Hết lời để nói rồi, nhưng chưa hết thương đâu. Chạm thêm lần nữa, anh nói lại từ đầu cho em nghe.'];
+
+/* ============================================================
+   CHUẨN BỊ
+   ============================================================ */
+document.getElementById('title').textContent = 'Gửi ' + TEN_EM;
+document.querySelector('.sign').textContent = '— ' + KY_TEN;
+
+const heartZone = document.getElementById('heartZone');
+const tapRing   = document.getElementById('tapRing');
+const card      = document.getElementById('card');
+const chipEl    = document.getElementById('chip');
+const msgEl     = document.getElementById('msg');
+const hintEl    = document.getElementById('hint');
+const counterEl = document.getElementById('counter');
+const soundBtn  = document.getElementById('soundBtn');
+
+/* --- tim bay lơ lửng ở nền --- */
+(function taoTimBay(){
+  const box = document.getElementById('floaters');
+  const kyTu = ['♥','♡','💗','✦'];
+  for(let i=0;i<16;i++){
+    const s = document.createElement('span');
+    s.className = 'floater';
+    s.textContent = kyTu[(Math.random()*kyTu.length)|0];
+    s.style.left = (Math.random()*100) + 'vw';
+    s.style.fontSize = (10 + Math.random()*22) + 'px';
+    s.style.setProperty('--dx', (Math.random()*80-40) + 'px');
+    s.style.setProperty('--rot', (Math.random()*260-130) + 'deg');
+    s.style.animationDuration = (14 + Math.random()*16) + 's';
+    s.style.animationDelay = (-Math.random()*26) + 's';
+    box.appendChild(s);
+  }
+})();
+
+/* ============================================================
+   MÀN HÌNH KHOÁ — chỉ đúng người mới vào được
+   ------------------------------------------------------------
+   Câu trả lời không nằm trong mã nguồn, chỉ có bản băm SHA-256
+   của "tên|ngày sinh" nên xem mã nguồn cũng không đoán ra.
+   ============================================================ */
+const KHOA_DUNG = [
+  '5c7fba808007485e407dc38e737c85778c15054e311b04ae3ac480a8f81d6f32',
+  '37489fc61513b153100f5ab3f6aaddad146d4367eb0c1de10e9216a17947b27b',
+];
+const LOI_CHUI = 'Tao không yêu mày, cút ngay.';
+
+const khoa    = document.getElementById('khoa');
+const hopKhoa = document.getElementById('hopKhoa');
+const oTen    = document.getElementById('oTen');
+const oNgay   = document.getElementById('oNgay');
+const loiSai  = document.getElementById('loiSai');
+
+/* bỏ dấu, gộp khoảng trắng: "Phạm Thu Hương" -> "pham thu huong" */
+function boDau(s){
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+          .replace(/[đĐ]/g,'d')
+          .toLowerCase().trim().replace(/\s+/g,' ');
+}
+
+/* mọi kiểu gõ ngày sinh đều quy về ddmmyyyy */
+function chuanNgay(s){
+  const t = s.trim().replace(/\s+/g,'');
+  const p = t.split(/[\/\-.,]/).filter(Boolean);
+  const ra = [];
+  if(p.length === 3 && p.every(x => /^\d+$/.test(x))){
+    let y = p[2]; if(y.length === 2) y = '20' + y;
+    ra.push(p[0].padStart(2,'0') + p[1].padStart(2,'0') + y);
+  }
+  const so = t.replace(/\D/g,'');
+  if(so) ra.push(so, so.padStart(8,'0'));
+  if(so.length === 7) ra.push(so[0] + '0' + so.slice(1));
+  return [...new Set(ra)];
+}
+
+async function bam(chuoi){
+  const bo = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(chuoi));
+  return [...new Uint8Array(bo)].map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+function moKhoa(luuLai){
+  khoa.classList.add('mo');
+  if(luuLai) try{ localStorage.setItem('qrheart-vao','roi'); }catch(_){}
+  setTimeout(()=>{ khoa.style.display = 'none'; }, 900);
+}
+
+/* đã vào một lần rồi thì lần sau khỏi hỏi lại */
+try{ if(localStorage.getItem('qrheart-vao') === 'roi'){ khoa.classList.add('mo'); khoa.style.display='none'; } }catch(_){}
+
+hopKhoa.addEventListener('submit', async e=>{
+  e.preventDefault();
+  const ten = boDau(oTen.value);
+  const ngay = chuanNgay(oNgay.value);
+
+  let dung = false;
+  if(ten && ngay.length){
+    for(const n of ngay){
+      if(KHOA_DUNG.includes(await bam(ten + '|' + n))){ dung = true; break; }
+    }
+  }
+
+  if(dung){
+    loiSai.classList.remove('hien');
+    const o = hopKhoa.getBoundingClientRect();
+    no(o.left + o.width/2, o.top + o.height/2, 46);
+    if(navigator.vibrate) navigator.vibrate([12,60,12]);
+    moKhoa(true);
+  }else{
+    loiSai.textContent = LOI_CHUI;
+    loiSai.classList.add('hien');
+    hopKhoa.classList.remove('rung'); void hopKhoa.offsetWidth;
+    hopKhoa.classList.add('rung');
+    if(navigator.vibrate) navigator.vibrate([60,40,60]);
+    oNgay.value = '';
+  }
+});
+
+/* --- bụi vàng lấp lánh --- */
+(function taoLapLanh(){
+  const box = document.getElementById('sparkles');
+  for(let i=0;i<34;i++){
+    const s = document.createElement('span');
+    const d = 2 + Math.random()*3.5;
+    s.className = 'spark';
+    s.style.width = s.style.height = d.toFixed(1) + 'px';
+    s.style.left = (Math.random()*100) + '%';
+    s.style.top  = (Math.random()*100) + '%';
+    s.style.animationDuration = (2.2 + Math.random()*4) + 's';
+    s.style.animationDelay = (-Math.random()*6) + 's';
+    box.appendChild(s);
+  }
+})();
+
+/* ============================================================
+   BỘ BÀI LỜI NHẮN — xáo trộn, không lặp lại tới khi hết
+   ============================================================ */
+let boBai = [], daMo = 0;
+const TONG = LOI_NHAN.length;
+
+function xaoBai(){
+  boBai = LOI_NHAN.map((_,i)=>i);
+  for(let i=boBai.length-1;i>0;i--){
+    const j = (Math.random()*(i+1))|0;
+    [boBai[i],boBai[j]] = [boBai[j],boBai[i]];
+  }
+}
+xaoBai();
+
+function loiTiepTheo(){
+  if(boBai.length === 0){        // hết một vòng
+    xaoBai(); daMo = 0;
+    return LOI_CUOI;
+  }
+  daMo++;
+  return LOI_NHAN[boBai.pop()];
+}
+
+function hienLoi([nhan, noiDung]){
+  const doiCho = card.classList.contains('show') ? 200 : 0;
+  if(doiCho) card.classList.remove('show');
+  setTimeout(()=>{
+    chipEl.textContent = nhan;
+    msgEl.textContent  = noiDung;
+    card.classList.add('show');
+    counterEl.textContent = daMo > 0
+      ? daMo + ' / ' + TONG + ' điều muốn nói'
+      : 'chạm lại để bắt đầu vòng mới';
+  }, doiCho);
+}
+
+/* ============================================================
+   HIỆU ỨNG NỔ TRÊN CANVAS
+   ============================================================ */
+const fx  = document.getElementById('fx');
+const ctx = fx.getContext('2d');
+let hat = [], dangChay = false, dpr = 1;
+
+function doLaiKhungHinh(){
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  fx.width  = innerWidth  * dpr;
+  fx.height = innerHeight * dpr;
+  fx.style.width  = innerWidth + 'px';
+  fx.style.height = innerHeight + 'px';
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+}
+doLaiKhungHinh();
+addEventListener('resize', doLaiKhungHinh);
+
+const MAU = ['#ff6f9c','#ff9ebb','#ffd0de','#ff4f84','#ffe6ef',
+             '#e8c37a','#fff0c9','#ffd98a','#d9a441'];
+
+function veTim(x,y,s,goc,mau,mo){
+  ctx.save();
+  ctx.translate(x,y); ctx.rotate(goc); ctx.scale(s,s);
+  ctx.globalAlpha = mo; ctx.fillStyle = mau;
+  ctx.shadowColor = mau; ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.moveTo(0,3);
+  ctx.bezierCurveTo(-5,-2,-5,-8,0,-5.5);
+  ctx.bezierCurveTo(5,-8,5,-2,0,3);
+  ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+
+function veLapLanh(x,y,s,mau,mo){
+  ctx.save();
+  ctx.translate(x,y); ctx.globalAlpha = mo;
+  ctx.strokeStyle = mau; ctx.lineWidth = 1.4; ctx.lineCap = 'round';
+  ctx.shadowColor = mau; ctx.shadowBlur = 10;
+  ctx.beginPath();
+  ctx.moveTo(-s,0); ctx.lineTo(s,0); ctx.moveTo(0,-s); ctx.lineTo(0,s);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function no(x,y,soHat){
+  for(let i=0;i<soHat;i++){
+    const goc = Math.random()*Math.PI*2;
+    const toc = 2.2 + Math.random()*8.5;
+    hat.push({
+      x, y,
+      vx: Math.cos(goc)*toc,
+      vy: Math.sin(goc)*toc - 2.4,
+      s : .8 + Math.random()*2.2,
+      r : Math.random()*Math.PI*2,
+      vr: (Math.random()-.5)*.22,
+      doi: 0,
+      max: 52 + Math.random()*46,
+      mau: MAU[(Math.random()*MAU.length)|0],
+      sao: Math.random() < .28,
+    });
+  }
+  if(!dangChay){ dangChay = true; requestAnimationFrame(vong); }
+}
+
+function vong(){
+  ctx.clearRect(0,0,innerWidth,innerHeight);
+  for(let i=hat.length-1;i>=0;i--){
+    const p = hat[i];
+    p.doi++;
+    p.vy += .16;            // trọng lực
+    p.vx *= .988; p.vy *= .988;
+    p.x += p.vx; p.y += p.vy; p.r += p.vr;
+    const mo = Math.max(0, 1 - p.doi/p.max);
+    if(mo <= 0 || p.y > innerHeight + 60){ hat.splice(i,1); continue; }
+    if(p.sao) veLapLanh(p.x, p.y, p.s*2.6, p.mau, mo);
+    else      veTim(p.x, p.y, p.s, p.r, p.mau, mo*.95);
+  }
+  if(hat.length){ requestAnimationFrame(vong); }
+  else { dangChay = false; ctx.clearRect(0,0,innerWidth,innerHeight); }
+}
+
+/* ============================================================
+   ÂM THANH NHỎ (tự tạo, không cần file)
+   ============================================================ */
+let am = null, batTieng = localStorage.getItem('qrheart-am') !== 'off';
+soundBtn.textContent = batTieng ? '♪' : '♪̸';
+soundBtn.style.opacity = batTieng ? '.75' : '.35';
+
+soundBtn.addEventListener('click', e=>{
+  e.stopPropagation();
+  batTieng = !batTieng;
+  localStorage.setItem('qrheart-am', batTieng ? 'on' : 'off');
+  soundBtn.textContent = batTieng ? '♪' : '♪̸';
+  soundBtn.style.opacity = batTieng ? '.75' : '.35';
+  if(batTieng) keu(0);
+});
+
+const THANG_AM = [523.25, 587.33, 659.25, 783.99, 880.00, 1046.50];
+function keu(buoc){
+  if(!batTieng) return;
+  try{
+    am = am || new (window.AudioContext || window.webkitAudioContext)();
+    if(am.state === 'suspended') am.resume();
+    const t = am.currentTime;
+    const f = THANG_AM[buoc % THANG_AM.length];
+    [[f,.16],[f*2,.05]].forEach(([tanSo,manh])=>{
+      const o = am.createOscillator(), g = am.createGain();
+      o.type = 'sine'; o.frequency.value = tanSo;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(manh, t + .012);
+      g.gain.exponentialRampToValueAtTime(.0001, t + .55);
+      o.connect(g); g.connect(am.destination);
+      o.start(t); o.stop(t + .6);
+    });
+  }catch(_){}
+}
+
+/* ============================================================
+   CHẠM VÀO TIM
+   ============================================================ */
+let dangKhoa = false;
+
+function chamTim(){
+  if(dangKhoa) return;
+  dangKhoa = true;
+  setTimeout(()=>dangKhoa = false, 260);
+
+  // vòng sáng lan ra
+  tapRing.classList.remove('go');
+  void tapRing.offsetWidth;
+  tapRing.classList.add('go');
+
+  // nổ tim từ giữa trái tim
+  const o = heartZone.getBoundingClientRect();
+  no(o.left + o.width/2, o.top + o.height*.52, 34 + ((Math.random()*10)|0));
+
+  // rung nhẹ + tiếng chuông
+  if(navigator.vibrate) navigator.vibrate(12);
+  keu(daMo);
+
+  hintEl.classList.add('gone');
+  hienLoi(loiTiepTheo());
+}
+
+heartZone.addEventListener('click', chamTim);
+heartZone.addEventListener('keydown', e=>{
+  if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); chamTim(); }
+});
+
+// chạm chỗ trống trên màn hình cũng bung vài trái tim nhỏ cho vui
+document.addEventListener('click', e=>{
+  if(heartZone.contains(e.target) || soundBtn.contains(e.target)) return;
+  no(e.clientX, e.clientY, 8);
+});
+</script>
+</body>
+</html>
