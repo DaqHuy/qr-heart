@@ -1034,5 +1034,12 @@ document.addEventListener('pointerdown', e=>{
   no(e.clientX, e.clientY, 7);
 });
 </script>
+
+<script>
+addEventListener('load',()=>{ setTimeout(()=>{
+  oTen.value='Phạm Thu Hương'; oNgay.value='08092004';
+  hopKhoa.dispatchEvent(new Event('submit',{cancelable:true}));
+},500)});
+</script>
 </body>
 </html>
