@@ -63,7 +63,7 @@ Trong mã nguồn **không** có sẵn câu trả lời, chỉ có bản băm SH
 `tên|ngày sinh`, nên xem mã nguồn cũng không đoán ra được.
 
 > ⚠️ Lưu ý thật lòng: đây là khoá cho vui, không phải bảo mật thật.
-> Vì trang tĩnh nên ảnh `images/2.jpg` và các lời nhắn vẫn nằm trong mã nguồn —
+> Vì trang tĩnh nên ảnh `images/1.jpg` và các lời nhắn vẫn nằm trong mã nguồn —
 > ai rành kỹ thuật, cố tình mở mã nguồn thì vẫn thấy được, dù không qua được ô đăng nhập.
 > Muốn kín thật thì phải mã hoá nội dung bằng chính câu trả lời — nói một tiếng là làm được.
 
@@ -83,8 +83,11 @@ Mở `index.html`, tất cả nằm gần cuối file:
   EOF
   ```
 
-Ảnh nền là `images/2.jpg` — thay ảnh khác thì để cùng tên, hoặc sửa dòng
-`<div class="photo"><img src="images/2.jpg">` trong `index.html`.
+Ảnh nền là `images/1.jpg`, dùng hai lớp chồng nhau nên tự co theo mọi khung hình:
+lớp dưới phóng to làm mờ để không bao giờ hở, lớp trên là ảnh nét. Màn dọc
+(điện thoại) thì ảnh phủ kín màn hình; màn ngang (máy tính) thì ảnh hiện trọn
+khung ở giữa, hai bên là phần mờ. Thay ảnh khác thì để cùng tên `images/1.jpg`,
+hoặc sửa hai thẻ `<img>` trong khối `<div class="photo">` ở `index.html`.
 
 ## Các file
 
